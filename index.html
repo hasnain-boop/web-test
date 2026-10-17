@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A little surprise for you 💗</title>
+<meta name="theme-color" content="#ffd9e6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Free Google Fonts. If offline, the fallback fonts below are used automatically. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,700;1,500&family=Caveat:wght@500;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ COLORS (personalize here) ============ */
+:root{
+  --pink:#ffc2d9; --pink-deep:#ff7fae; --rose:#e24a86;
+  --cream:#fff6ec; --lavender:#d9ccff; --lav-deep:#8f78e0;
+  --ink:#5a3550; --card:#fffaf5;
+  --display:"Fraunces",Georgia,serif; --hand:"Caveat","Comic Sans MS",cursive; --body:"Nunito",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:var(--body);color:var(--ink);overflow:hidden;
+  background:radial-gradient(circle at 15% 10%,var(--lavender) 0,transparent 45%),
+             radial-gradient(circle at 90% 90%,var(--pink) 0,transparent 50%),var(--cream);
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.float{position:absolute;bottom:-40px;animation:rise linear forwards;opacity:.8}
+@keyframes rise{to{transform:translate(var(--dx),-115vh) rotate(var(--rot));opacity:0}}
+.fall{top:-40px;bottom:auto;animation-name:fall}
+@keyframes fall{to{transform:translate(var(--dx),115vh) rotate(var(--rot));opacity:.2}}
+
+/* ============ SCENES ============ */
+.scene{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.1rem;padding:1.2rem;text-align:center;overflow-y:auto}
+.scene[hidden]{display:none}
+.scene.in{animation:sceneIn .7s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes sceneIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+h1,h2{font-family:var(--display);font-weight:700;line-height:1.15;outline:none}
+h1{font-size:clamp(2.3rem,9vw,3.8rem)} h2{font-size:clamp(1.7rem,6.5vw,2.6rem)}
+p{line-height:1.6;font-size:1.05rem}
+.hand{font-family:var(--hand);font-size:1.5rem}
+.card{background:var(--card);border-radius:28px;padding:1.4rem 1.3rem;box-shadow:0 14px 40px rgba(226,74,134,.18);max-width:520px;width:100%}
+
+/* buttons */
+.btn{font:700 1.05rem var(--body);color:#fff;border:0;border-radius:999px;padding:.95rem 1.6rem;min-height:48px;cursor:pointer;
+  background:linear-gradient(135deg,var(--pink-deep),var(--rose));box-shadow:0 8px 20px rgba(226,74,134,.35);
+  transition:transform .15s,box-shadow .15s;max-width:100%}
+.btn:hover{transform:translateY(-2px) scale(1.03)} .btn:active{transform:scale(.97)}
+.btn.soft{background:linear-gradient(135deg,var(--lavender),var(--lav-deep));box-shadow:0 8px 20px rgba(143,120,224,.35)}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:0 6px 16px rgba(90,53,80,.15)}
+.btn.pulse{animation:pulse 1.8s infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+:focus-visible{outline:3px solid var(--lav-deep);outline-offset:3px}
+.choices{display:flex;flex-direction:column;gap:.8rem;width:min(420px,100%)}
+.choices .btn{width:100%}
+
+/* gift */
+.gift{width:150px;height:150px;position:relative;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-14px)}}
+.gift .box{position:absolute;bottom:0;left:10px;right:10px;height:95px;border-radius:0 0 16px 16px;background:linear-gradient(var(--pink-deep),var(--rose))}
+.gift .box:before{content:"";position:absolute;left:50%;width:22px;top:0;bottom:0;margin-left:-11px;background:var(--cream)}
+.gift .lid{position:absolute;top:22px;left:0;right:0;height:42px;border-radius:14px;background:linear-gradient(var(--pink),var(--pink-deep));
+  transform-origin:left bottom;transition:transform .8s cubic-bezier(.3,1.6,.5,1);z-index:2}
+.gift .lid:before{content:"🎀";position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:2.2rem}
+.gift.open .lid{transform:translate(-10px,-40px) rotate(-35deg)}
+.gift.open{animation:none}
+.gift .pop{position:absolute;top:30px;left:50%;font-size:2rem;opacity:0;transform:translateX(-50%)}
+.gift.open .pop{animation:rise2 .9s ease-out}
+@keyframes rise2{from{opacity:1;transform:translate(-50%,10px)}to{opacity:0;transform:translate(-50%,-90px)}}
+
+/* envelope */
+.env{position:relative;width:min(300px,80vw);height:200px;margin-top:3rem}
+.env .back{position:absolute;inset:0;background:var(--lavender);border-radius:10px 10px 18px 18px;box-shadow:0 12px 30px rgba(143,120,224,.3)}
+.env .flap{position:absolute;top:0;left:0;right:0;height:110px;background:var(--lav-deep);clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top;transition:transform .7s,z-index 0s .35s;z-index:4}
+.env .front{position:absolute;inset:0;z-index:3;background:linear-gradient(135deg,transparent 49%,#c9b9ff 50%) left/50% 100% no-repeat,
+  linear-gradient(225deg,transparent 49%,#c9b9ff 50%) right/50% 100% no-repeat;border-radius:10px 10px 18px 18px}
+.env .seal{position:absolute;top:84px;left:50%;margin-left:-18px;font-size:2.2rem;z-index:5;transition:opacity .3s}
+.env.open .flap{transform:rotateX(180deg);z-index:1}
+.env.open .seal{opacity:0}
+.letter{position:absolute;left:6%;right:6%;top:10px;height:170px;background:var(--card);border-radius:10px;z-index:2;
+  transition:transform .9s .4s,height .9s .4s;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.env.open .letter{transform:translateY(-30px)}
+.paper{display:none;text-align:left;font-family:var(--hand);font-size:clamp(1.3rem,5vw,1.65rem);line-height:1.45;min-height:12rem}
+.paper img{display:block;width:120px;height:120px;object-fit:cover;border-radius:50%;margin:0 auto .8rem;border:4px solid var(--pink)}
+.caret:after{content:"|";animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* reasons */
+.cards{display:flex;flex-direction:column;gap:.9rem;width:min(520px,100%)}
+.reason{display:flex;gap:1rem;align-items:center;text-align:left;background:var(--card);border-radius:24px;padding:1rem 1.2rem;
+  box-shadow:0 10px 28px rgba(143,120,224,.2);opacity:0;animation:pop .7s cubic-bezier(.3,1.6,.5,1) forwards}
+.reason:nth-child(2){animation-delay:.35s}.reason:nth-child(3){animation-delay:.7s}
+.reason .ic{font-size:2.4rem;animation:bob 2.4s ease-in-out infinite}
+.reason h3{font-family:var(--display);font-size:1.15rem;margin-bottom:.2rem}
+.reason p{font-size:.98rem;line-height:1.45}
+@keyframes pop{from{opacity:0;transform:scale(.7) rotate(-4deg)}to{opacity:1;transform:none}}
+
+/* flowers */
+.garden{display:flex;justify-content:center;align-items:flex-end;gap:.4rem;height:130px;font-size:2.6rem}
+.flower{display:flex;flex-direction:column;align-items:center;transform-origin:bottom;transform:scaleY(0);animation:grow 1.2s cubic-bezier(.3,1.5,.5,1) forwards}
+.flower:after{content:"";width:4px;border-radius:2px;background:#8fcf9f;height:var(--h)}
+.flower:nth-child(2){animation-delay:.3s}.flower:nth-child(3){animation-delay:.6s}.flower:nth-child(4){animation-delay:.9s}.flower:nth-child(5){animation-delay:1.2s}
+@keyframes grow{to{transform:scaleY(1)}}
+.big{font-size:4rem;animation:bob 1.6s ease-in-out infinite}
+
+/* mute */
+#music{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:10;width:48px;height:48px;border-radius:50%;border:0;
+  background:var(--card);font-size:1.3rem;cursor:pointer;box-shadow:0 6px 16px rgba(90,53,80,.2)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .reason,.flower{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<!--
+=====================  HOW TO PERSONALIZE  =====================
+1. Edit the CONFIG block in the <script> at the bottom: names, letter, reasons, confession, photo.
+2. COLORS: change the --pink, --lavender, --cream, --rose variables at the top of the <style>.
+3. PHOTO: put a picture (e.g. us.jpg) in the same folder as index.html and set CONFIG.photo = "us.jpg".
+   Leave it as "" for no photo.
+4. MUSIC: a soft music-box tune is generated in the browser (no files needed). It is OFF until she taps the 🔇 button.
+================================================================
+-->
+<div id="fx" aria-hidden="true"></div>
+<button id="music" aria-pressed="false" aria-label="Turn music on" title="Music on/off">🔇</button>
+
+<main>
+<!-- 1 WELCOME -->
+<section class="scene" id="welcome" aria-labelledby="t-welcome">
+  <div class="gift" id="gift" aria-hidden="true"><div class="pop">💖</div><div class="lid"></div><div class="box"></div></div>
+  <h1 id="t-welcome" tabindex="-1">Hey, <span data-her>cutie</span>!</h1>
+  <p>I made a little something just for you.</p>
+  <button class="btn pulse" id="openGift">Open your surprise 💗</button>
+</section>
+
+<!-- 2 LOVE LETTER -->
+<section class="scene" id="letter" aria-labelledby="t-letter" hidden>
+  <h2 id="t-letter" tabindex="-1">You've got mail 💌</h2>
+  <div class="env" id="env"><div class="back"></div><div class="letter"></div><div class="front"></div><div class="flap"></div><div class="seal" aria-hidden="true">💗</div></div>
+  <button class="btn" id="openEnv">Open the envelope</button>
+  <div class="card paper" id="paper">
+    <div id="photoWrap"></div>
+    <p id="typed" aria-hidden="true"></p>
+    <p class="sr" id="fullLetter"></p>
+  </div>
+  <div style="display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center">
+    <button class="btn ghost" id="skipType" hidden>Show all</button>
+    <button class="btn" id="toReasons" hidden>Keep going 💕</button>
+  </div>
+</section>
+
+<!-- 3 REASONS -->
+<section class="scene" id="reasons" aria-labelledby="t-reasons" hidden>
+  <h2 id="t-reasons" tabindex="-1">Why I like you ✨</h2>
+  <div class="cards" id="cards"></div>
+  <button class="btn" id="toConf">There's more 🌸</button>
+</section>
+
+<!-- 4 CONFESSION -->
+<section class="scene" id="confession" aria-labelledby="t-conf" hidden>
+  <h2 id="t-conf" tabindex="-1">So, here's the truth…</h2>
+  <div class="card"><p id="confText"></p></div>
+  <div class="garden" id="garden" aria-hidden="true"></div>
+  <button class="btn pulse" id="toAsk">I have a question 💌</button>
+</section>
+
+<!-- 5 PROPOSAL -->
+<section class="scene" id="proposal" aria-labelledby="t-ask" hidden>
+  <div class="big" aria-hidden="true">💖</div>
+  <h2 id="t-ask" tabindex="-1">Will you be my girlfriend? 💖</h2>
+  <p>Whatever your answer is, it's completely okay.</p>
+  <div class="choices">
+    <button class="btn" data-go="yes">YES! 💕</button>
+    <button class="btn soft" data-go="time">I need time 🫶</button>
+    <button class="btn ghost" data-go="no">I don't feel the same way 💗</button>
+  </div>
+</section>
+
+<!-- 6 YES -->
+<section class="scene" id="yes" aria-labelledby="t-yes" hidden>
+  <div class="big" aria-hidden="true">🥰</div>
+  <h1 id="t-yes" tabindex="-1">She said YES! 🎉</h1>
+  <div class="card"><p id="yesText"></p></div>
+  <div class="garden" aria-hidden="true"><span class="flower" style="--h:30px">🌷</span><span class="flower" style="--h:50px">🌸</span><span class="flower" style="--h:36px">🌹</span><span class="flower" style="--h:50px">🌸</span><span class="flower" style="--h:30px">🌷</span></div>
+  <button class="btn ghost" data-go="welcome" data-replay>Play it again 🔁</button>
+</section>
+
+<!-- 7 TIME -->
+<section class="scene" id="time" aria-labelledby="t-time" hidden>
+  <div class="big" aria-hidden="true">🫶</div>
+  <h2 id="t-time" tabindex="-1">Take all the time you need</h2>
+  <div class="card"><p id="timeText"></p></div>
+  <button class="btn soft" data-go="proposal">I'm ready to answer</button>
+  <button class="btn ghost" data-go="welcome" data-replay>Play it again 🔁</button>
+</section>
+
+<!-- 8 NO -->
+<section class="scene" id="no" aria-labelledby="t-no" hidden>
+  <div class="big" aria-hidden="true">💗</div>
+  <h2 id="t-no" tabindex="-1">Thank you for being honest</h2>
+  <div class="card"><p id="noText"></p></div>
+  <button class="btn ghost" data-go="welcome" data-replay>Back to the start 🔁</button>
+</section>
+</main>
+
+<script>
+/* ============ PERSONALIZE HERE ============ */
+const CONFIG = {
+  herName: "cutie",          // Her name or nickname (shown in "Hey, ___!")
+  yourName: "Me",            // Signs the letter and the messages
+  photo: "",                 // e.g. "us.jpg" (file next to index.html). "" = no photo
+  letter: "Hi " + "{her}" + ",\n\nI don't really know how to say this without smiling like an idiot, so I made you a website instead. " +
+          "You make ordinary days feel softer and brighter, and I catch myself looking forward to every message from you.\n\nPlease read on 💗\n\n— {me}",
+  reasons: [  // exactly 3 cards: icon, title, text
+    {icon:"😊", title:"Your smile",    text:"It makes my whole day better, every single time."},
+    {icon:"🌷", title:"Your kindness", text:"The way you care about people is one of my favorite things about you."},
+    {icon:"✨", title:"How I feel",    text:"I'm just happier and more myself when I'm around you."}
+  ],
+  confession: "I like you. Not a small, passing kind of like, but the kind that makes me want to know everything about you and make you laugh every day.",
+  yesText:  "You just made me the happiest person alive. I promise to be kind, to listen, and to make you smile as often as I can. 💕 — {me}",
+  timeText: "There's no rush and no pressure at all. Think about it for as long as you like. I'm not going anywhere, and I'll still be your friend no matter what. 🫶",
+  noText:   "I completely understand, and I respect your answer. I'm really glad you were honest with me, and I'll never make things awkward. Thank you for being you. 💗 — {me}"
+};
+/* ============================================ */
+
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fill=t=>t.replace(/\{her\}/g,CONFIG.herName).replace(/\{me\}/g,CONFIG.yourName);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---- scene manager: only one scene visible at a time ---- */
+function go(id){
+  $$(".scene").forEach(s=>{s.hidden=s.id!==id; s.classList.remove("in");});
+  const sc=$("#"+id); sc.hidden=false; void sc.offsetWidth; sc.classList.add("in"); sc.scrollTop=0;
+  const h=sc.querySelector("h1,h2"); if(h) h.focus({preventScroll:true});
+  if(id==="yes") burst(70); if(id==="confession") rain();
+  if(id==="welcome") resetAll();
+}
+
+/* ---- fill in text ---- */
+$$("[data-her]").forEach(e=>e.textContent=CONFIG.herName);
+$("#confText").textContent=fill(CONFIG.confession);
+$("#yesText").textContent=fill(CONFIG.yesText);
+$("#timeText").textContent=fill(CONFIG.timeText);
+$("#noText").textContent=fill(CONFIG.noText);
+$("#cards").innerHTML=CONFIG.reasons.map(r=>`<article class="reason"><div class="ic" aria-hidden="true">${r.icon}</div><div><h3>${r.title}</h3><p>${r.text}</p></div></article>`).join("");
+$("#garden").innerHTML=["🌸","🌷","🌻","🌹","🌼"].map((f,i)=>`<span class="flower" style="--h:${30+(i%3)*18}px">${f}</span>`).join("");
+if(CONFIG.photo){const i=new Image();i.src=CONFIG.photo;i.alt="A photo of us";$("#photoWrap").appendChild(i);}
+
+/* ---- 1 gift ---- */
+$("#openGift").onclick=async()=>{
+  $("#openGift").disabled=true; $("#gift").classList.add("open"); burst(18);
+  await sleep(reduce?50:1100); go("letter");
+};
+
+/* ---- 2 letter + typewriter ---- */
+let typing=0, text="";
+$("#openEnv").onclick=async()=>{
+  $("#openEnv").hidden=true; $("#env").classList.add("open");
+  await sleep(reduce?50:1300);
+  $("#env").style.display="none"; $("#t-letter").hidden=true;
+  const p=$("#paper"); p.style.display="block";
+  text=fill(CONFIG.letter); $("#fullLetter").textContent=text;
+  $("#toReasons").hidden=false;
+  if(reduce){ $("#typed").style.whiteSpace="pre-wrap"; $("#typed").textContent=text; return; }
+  $("#skipType").hidden=false; $("#toReasons").hidden=true; typeIt();
+};
+async function typeIt(){
+  const el=$("#typed"), id=++typing; el.style.whiteSpace="pre-wrap"; el.classList.add("caret"); el.textContent="";
+  for(let i=1;i<=text.length;i++){ if(id!==typing) return; el.textContent=text.slice(0,i); await sleep(text[i-1]==="\n"?260:38); }
+  finishType();
+}
+function finishType(){ typing++; const el=$("#typed"); el.textContent=text; el.classList.remove("caret"); $("#skipType").hidden=true; $("#toReasons").hidden=false; $("#toReasons").focus(); }
+$("#skipType").onclick=finishType;
+$("#toReasons").onclick=()=>go("reasons");
+$("#toConf").onclick=()=>go("confession");
+$("#toAsk").onclick=()=>go("proposal");
+
+/* ---- generic nav buttons ---- */
+$$("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+/* ---- replay: reset everything ---- */
+function resetAll(){
+  typing++; $("#gift").classList.remove("open"); $("#openGift").disabled=false;
+  $("#env").classList.remove("open"); $("#env").style.display=""; $("#t-letter").hidden=false;
+  $("#openEnv").hidden=false; $("#paper").style.display="none"; $("#typed").textContent="";
+  $("#skipType").hidden=true; $("#toReasons").hidden=true;
+  const c=$("#cards"), h=c.innerHTML; c.innerHTML=""; c.innerHTML=h;      // restart card animations
+  const g=$("#garden"), gh=g.innerHTML; g.innerHTML=""; g.innerHTML=gh;
+}
+
+/* ---- floating hearts, sparkles, petals ---- */
+const fx=$("#fx");
+function spawn(emoji,cls,size){
+  const e=document.createElement("span"); e.className="float "+(cls||""); e.textContent=emoji;
+  const dur=6+Math.random()*7;
+  e.style.cssText+=`left:${Math.random()*100}%;font-size:${size||14+Math.random()*22}px;animation-duration:${dur}s;--dx:${(Math.random()-.5)*160}px;--rot:${(Math.random()-.5)*360}deg`;
+  fx.appendChild(e); setTimeout(()=>e.remove(),dur*1000);
+}
+const hearts=["💗","💕","💖","✨","🌸","💞","🌷"];
+if(!reduce){
+  setInterval(()=>{ if(fx.childElementCount<22) spawn(hearts[Math.random()*hearts.length|0]); },700);
+}
+function burst(n){ if(reduce){n=Math.min(n,10);} for(let i=0;i<n;i++) setTimeout(()=>spawn(hearts[Math.random()*hearts.length|0],"",18+Math.random()*26),i*40); }
+function rain(){ if(reduce) return; for(let i=0;i<14;i++) setTimeout(()=>spawn("🌸","fall",16+Math.random()*14),i*180); }
+
+/* ---- music: a soft music-box loop made with the browser's Web Audio (no files, no services) ---- */
+let ctx=null, timer=null, step=0, on=false;
+const notes=[523.25,659.25,784,659.25,880,784,659.25,587.33,523.25,659.25,784,1046.5,880,784,659.25,587.33];
+function tone(f){
+  const o=ctx.createOscillator(), g=ctx.createGain(), t=ctx.currentTime;
+  o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.08,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+1.4); o.connect(g).connect(ctx.destination); o.start(t); o.stop(t+1.5);
+}
+$("#music").onclick=()=>{
+  const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+  on=!on; ctx=ctx||new AC();
+  if(on){ ctx.resume(); timer=setInterval(()=>tone(notes[step++%notes.length]),480); }
+  else { clearInterval(timer); }
+  const b=$("#music"); b.textContent=on?"🔊":"🔇"; b.setAttribute("aria-pressed",on); b.setAttribute("aria-label",on?"Turn music off":"Turn music on");
+};
+
+go("welcome");
+</script>
+</body>
+</html>
